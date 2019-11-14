@@ -144,7 +144,7 @@ class Upload extends React.Component {
                 type="text"
                 className="form-control"
                 id="meme-text-top"
-                placeholder="That moment when..."
+                placeholder="(required)"
                 onChange={this.handleTopTextChange}
               />
             </div>
@@ -154,7 +154,7 @@ class Upload extends React.Component {
                 type="text"
                 className="form-control"
                 id="meme-text-bot"
-                placeholder="See your compiler logs"
+                placeholder="(required)"
                 onChange={this.handleBottomTextChange}
               />
             </div>
@@ -165,7 +165,7 @@ class Upload extends React.Component {
                   onClick={this.generateMeme}
                   style={{ marginTop: "1rem", width: "100%" }}
                 >
-                  GENERATE DOWNLOAD LINK
+                  DOWNLOAD
                 </button>
               </div>
             ) : null}
