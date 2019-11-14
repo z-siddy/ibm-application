@@ -1,17 +1,20 @@
-# Task:  
+# Meme generator
+This tool lets you to create memes in a matter of seconds. All you have to do is either upload your own image, or fetch one from the world wide web, add some captions and *voilà*!
+## Development tools
 
-    Develop a web application that adds text to an image (create your own meme generator).  
-    Any third party service can be reused.  
+ - React.js (Front-end)
+ - Node.js (Back-end)
+ 
+ ## How to use this beautiful tool?
+ ### Locally:
+ 
 
-  
-## Requirements:  
-- Your application must accept text as input;  
-- Your application can use a predetermined image or accept one as input;  
-- Your application should follow responsive design principles;  
-- Upload your source code to GitHub;  
-- Use Spring or Node.js for backend;  
-- Use React or Angular for frontend.  
-  
-## Nice to haves:  
-- Containerize your solution (Docker);  
-- Deploy your solution to cloud (IBM Cloud, AWS, Azure, Heroku).
+> To simply run this application on your local machine you have to open a terminal with Node.js environment and type these commands:
+> API: ***npm run start***
+> React.js APP: ***npm start*** 
+
+### Hosted version:
+
+> Use this **[LINK](tobeannounced.com)** and experience this application without extra effort.
+
+

@@ -19,40 +19,60 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage }).single("file");
 
 app.get("/:name/download", function(req, res) {
-  const file = `${__dirname}/upload-folder/` + req.body.name;
+  const file = `${__dirname}/public/` + req.params.name;
   res.download(file);
 });
 
 app.post("/upload", async function(req, res) {
   let path = null;
   await upload(req, res, async function(err) {
-    console.log(req);
     if (err instanceof multer.MulterError) {
       return res.status(500).json(err);
     } else if (err) {
       return res.status(500).json(err);
     }
     file = req.file.filename;
-    Jimp.read("public/" + file, async (err, lenna) => {
-      if (err) throw err;
-      await lenna
-        .quality(100) // set JPEG quality
-        .greyscale() // set greyscale
-        .write("public/"+file); // save
-      let message = 'Hello!'
-      let x = 10
-      let y = 10
-      Jimp.loadFont(Jimp.FONT_SANS_64_BLACK)
-        .then(font => {
-          lenna.print(font, x, y, message);
-          return lenna;
-        })
-        .then(lenna => {
-          let file = `meme.${lenna.getExtension()}`;
-          return lenna.write(file); // save
-        });
-    });
-    return res.status(200).json({ message: file });
+    await Jimp.read("public/" + file)
+      .then(
+        async tpl => await Jimp.loadFont("impact.fnt").then(font => [tpl, font])
+      )
+      .then(data => {
+        tpl = data[0];
+        font = data[1];
+        tpl.contain(800, 800);
+        var w = tpl.bitmap.width;
+        var h = tpl.bitmap.height;
+
+        tpl.print(
+          font,
+          0,
+          0,
+          {
+            text: req.body.topText,
+            alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
+            alignmentY: Jimp.VERTICAL_ALIGN_TOP
+          },
+          w,
+          h
+        );
+
+        tpl.print(
+          font,
+          0,
+          0,
+          {
+            text: req.body.bottomText,
+            alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
+            alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM
+          },
+          w,
+          h
+        );
+        return tpl;
+      })
+
+      .then(tpl => tpl.quality(100).write("public/" + file));
+    return res.status(200).json({ path: file });
   });
 });
 

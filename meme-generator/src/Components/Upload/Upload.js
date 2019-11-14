@@ -1,6 +1,6 @@
 import React from "react";
-import Download from "../Download/Download";
 import axios from "axios";
+import "./Upload.css";
 
 class Upload extends React.Component {
   constructor(props) {
@@ -10,7 +10,6 @@ class Upload extends React.Component {
       topText: null,
       bottomText: null,
       imgUrl: null,
-      downloadLink: null,
       previewLink: null
     };
     this.handleImgChange = this.handleImgChange.bind(this);
@@ -22,17 +21,18 @@ class Upload extends React.Component {
   }
 
   componentDidMount() {
-    axios.get(`http://localhost:3000/img/meme.jpg`, {
-      responseType: 'arraybuffer'
-    }).then(async res => {
-      var file = await new Blob([res.data]);
-      file = await new File([file], "meme.jpg");
-      console.log(file);
-      this.setState({
-        file: file,
-        previewLink: URL.createObjectURL(file)
+    axios
+      .get(`http://localhost:3000/img/meme.jpg`, {
+        responseType: "arraybuffer"
+      })
+      .then(async res => {
+        var file = await new Blob([res.data]);
+        file = await new File([file], "meme.jpg");
+        this.setState({
+          file: file,
+          previewLink: URL.createObjectURL(file)
+        });
       });
-    })
   }
 
   handleImgChange(event) {
@@ -62,22 +62,29 @@ class Upload extends React.Component {
   }
 
   updateImg() {
-    axios.get(this.state.imgUrl, {
-      responseType: 'arraybuffer'
-    }).then(async res => {
-      var file = await new Blob([res.data]);
-      file = await new File([file], "meme.jpg");
-      console.log(file);
-      this.setState({
-        file: file,
-        previewLink: URL.createObjectURL(file)
+    axios
+      .get(this.state.imgUrl, {
+        responseType: "arraybuffer"
+      })
+      .then(async res => {
+        var file = await new Blob([res.data]);
+        file = await new File([file], "meme.jpg");
+        this.setState({
+          file: file,
+          previewLink: URL.createObjectURL(file)
+        });
       });
-    })
+  }
+
+  getFileExtension(filename) {
+    return /[.]/.exec(filename) ? /[^.]+$/.exec(filename)[0] : undefined;
   }
 
   generateMeme() {
     const data = new FormData();
     data.append("file", this.state.file);
+    data.append("topText", this.state.topText);
+    data.append("bottomText", this.state.bottomText);
     const config = {
       headers: {
         "content-type": "multipart/form-data"
@@ -85,9 +92,15 @@ class Upload extends React.Component {
     };
     axios
       .post(`http://localhost:3001/upload`, data, config)
-      .then(response => {
-        alert("The file is successfully uploaded");
-        console.log(response);
+      .then(async res => {
+        var ext = this.getFileExtension(res.data.path);
+        const link = document.createElement("a");
+        link.href = `http://localhost:3001/${res.data.path}/download`;
+        link.setAttribute("download", "meme." + ext);
+        document.body.appendChild(link);
+        await link.click();
+        await link.remove();
+        alert("Thank you for using this amazing APP!");
       })
       .catch(error => {
         console.log(error);
@@ -98,18 +111,18 @@ class Upload extends React.Component {
     return (
       <div>
         <div className="row">
-          <div className="col-12 col-lg-6">
+          <div className="col-12 text-center">
+            <h2>Made by <a href="https://github.com/z-siddy/">z.siddy</a></h2>
+          </div>
+          <div className="col-12 col-lg-6 input-box">
             <div className="form-group">
-              <label htmlFor="upload">Choose custom image</label>
-              <input
-                type="file"
-                className="form-control-file"
-                id="upload"
-                onChange={this.handleImgChange}
-              />
+              <label className="btn-bs-file btn btn-lg btn-custom">
+                UPLOAD IMAGE
+                <input type="file" onChange={this.handleImgChange} />
+              </label>
             </div>
-            <div className="form-group">
-              <label htmlFor="meme-text-top">Choose meme from URL</label>
+            <div className="form-group custom-box">
+              <label htmlFor="meme-text-top">Image URL</label>
               <input
                 type="text"
                 className="form-control"
@@ -118,15 +131,15 @@ class Upload extends React.Component {
                 onChange={this.handleImgUrlChange}
               />
               <button
-                className="btn btn-primary"
+                className="btn btn-custom"
                 onClick={this.updateImg}
                 style={{ marginTop: "1rem", width: "100%" }}
               >
-                Fetch
+                FETCH IMAGE
               </button>
             </div>
             <div className="form-group">
-              <label htmlFor="meme-text-top">Top text</label>
+              <label htmlFor="meme-text-top">TOP TEXT</label>
               <input
                 type="text"
                 className="form-control"
@@ -136,7 +149,7 @@ class Upload extends React.Component {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="meme-text-bot">Bottom text</label>
+              <label htmlFor="meme-text-bot">BOTTOM TEXT</label>
               <input
                 type="text"
                 className="form-control"
@@ -145,25 +158,28 @@ class Upload extends React.Component {
                 onChange={this.handleBottomTextChange}
               />
             </div>
-            <div className="form-group">
-              <button
-                className="btn btn-primary"
-                onClick={this.generateMeme}
-                style={{ marginTop: "1rem", width: "100%" }}
-              >
-                Generate this meme
-              </button>
-            </div>
+            {this.state.topText && this.state.bottomText ? (
+              <div className="form-group">
+                <button
+                  className="btn btn-custom"
+                  onClick={this.generateMeme}
+                  style={{ marginTop: "1rem", width: "100%" }}
+                >
+                  GENERATE DOWNLOAD LINK
+                </button>
+              </div>
+            ) : null}
           </div>
-          <div className="col-12 col-lg-6">
+          <div className="col-12 col-lg-6 meme-box">
             <img
               className="img-fluid"
               src={this.state.previewLink}
               alt="Meme pic"
             />
+            <h2 className="top">{this.state.topText}</h2>
+            <h2 className="bottom">{this.state.bottomText}</h2>
           </div>
         </div>
-        <Download downloadLink={this.state.downloadLink} />
       </div>
     );
   }

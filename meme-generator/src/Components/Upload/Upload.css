@@ -1,0 +1,69 @@
+.meme-box {
+  position: relative;
+  margin: auto;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.meme-box > img {
+  width: 100%;
+}
+
+.meme-box > h2 {
+  position: absolute;
+  width: 80%;
+  text-align: center;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0 5px;
+  font-family: impact, sans-serif;
+  font-size: 3em;
+  color: white;
+}
+
+.meme-box > .bottom {
+  bottom: 0;
+}
+
+.meme-box > .top {
+  top: 0;
+}
+
+.input-box {
+  background: #e5e5e5;
+  padding: 20px;
+}
+
+.btn-custom {
+  background: #3c3c3c;
+  border-radius: 2rem;
+  transition: 0.5s;
+  color: #fff;
+  cursor: pointer;
+  width: 100%;
+}
+
+.btn-custom:hover {
+  background: #666363;
+  color: #fff;
+}
+
+.btn-bs-file {
+  position: relative;
+}
+.btn-bs-file input[type="file"] {
+  position: absolute;
+  top: -9999999;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  width: 0;
+  height: 0;
+  outline: none;
+  cursor: inherit;
+}
+
+.custom-box {
+  padding: 20px;
+  background: #a6a6a6;
+  color: white;
+}
