@@ -3,7 +3,8 @@ var app = express();
 var multer = require("multer");
 var cors = require("cors");
 var Jimp = require("jimp");
-var PORT = 3001;
+var path = require("path");
+var PORT = process.env.PORT || 3001;
 
 app.use(cors());
 
@@ -75,5 +76,12 @@ app.post("/upload", async function(req, res) {
     return res.status(200).json({ path: file });
   });
 });
+
+// Serve static files from the React frontend app
+app.use(express.static(path.join(__dirname, 'build')))
+// Anything that doesn't match the above, send back index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname + 'build/index.html'))
+})
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));

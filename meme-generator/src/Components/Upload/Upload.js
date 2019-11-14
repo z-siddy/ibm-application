@@ -22,7 +22,7 @@ class Upload extends React.Component {
 
   componentDidMount() {
     axios
-      .get(`http://localhost:3000/img/meme.jpg`, {
+      .get(`/img/meme.jpg`, {
         responseType: "arraybuffer"
       })
       .then(async res => {
@@ -91,11 +91,11 @@ class Upload extends React.Component {
       }
     };
     axios
-      .post(`http://localhost:3001/upload`, data, config)
+      .post(`/upload`, data, config)
       .then(async res => {
         var ext = this.getFileExtension(res.data.path);
         const link = document.createElement("a");
-        link.href = `http://localhost:3001/${res.data.path}/download`;
+        link.href = `/${res.data.path}/download`;
         link.setAttribute("download", "meme." + ext);
         document.body.appendChild(link);
         await link.click();

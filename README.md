@@ -15,6 +15,6 @@ This tool lets you to create memes in a matter of seconds. All you have to do is
 
 ### Hosted version:
 
-> Use this **[LINK](tobeannounced.com)** and experience this application without extra effort.
+> Use this **[LINK](https://ultimate-meme-generator.herokuapp.com/)** and experience this application without extra effort.
 
 
