@@ -15,6 +15,6 @@ This tool lets you to create memes in a matter of seconds. All you have to do is
 
 ### Hosted version:
 
-> Use this **[LINK](https://ultimate-meme-generator.herokuapp.com/)** and experience this application without extra effort.
+> Use this **[LINK](https://ultimate-meme-generator.herokuapp.com/)** and experience this application without extra effort. This online version is containerized with Docker. The Dockerfile can be found in the api/ directory.
 
 
